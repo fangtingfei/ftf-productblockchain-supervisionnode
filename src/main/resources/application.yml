@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: supervision
+server:
+  port: 6000

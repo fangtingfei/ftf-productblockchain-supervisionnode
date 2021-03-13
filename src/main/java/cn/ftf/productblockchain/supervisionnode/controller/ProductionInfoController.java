@@ -41,7 +41,7 @@ public class ProductionInfoController {
             e.printStackTrace();
         }
         try {
-            Product product=new Product(productInfo.getCompany(),productInfo.getProduct(),productInfo.getProductionDate(),productInfo.getOrginPlace(),productInfo.getDescription());
+            Product product=new Product(productInfo.getCompany(),productInfo.getProduct(),productInfo.getProductionDate(),productInfo.getOrginPlace(),productInfo.getDescription(),productInfo.getNotes());
             productInfojson=mapper.writeValueAsString(product);
             System.out.println("productInfojson:\n"+productInfojson);
         } catch (JsonProcessingException e) {

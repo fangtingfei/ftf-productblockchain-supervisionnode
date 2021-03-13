@@ -1,6 +1,7 @@
 package cn.ftf.productblockchain.supervisionnode.bean;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * 商品录入信息
@@ -15,9 +16,24 @@ public class ProductInfo implements Serializable {
     private String productionDate;
     private String orginPlace;
     private String description;
+    private String notes;
 
     private String senderPublicKey;   //扫描终端公钥
     private String signaturedData;  //数据签名
+
+    public ProductInfo(){
+
+    }
+    public ProductInfo(String company, String product, String productionDate, String orginPlace, String description, String notes, String senderPublicKey, String signaturedData) {
+        this.company = company;
+        this.product = product;
+        this.productionDate = productionDate;
+        this.orginPlace = orginPlace;
+        this.description = description;
+        this.notes = notes;
+        this.senderPublicKey = senderPublicKey;
+        this.signaturedData = signaturedData;
+    }
 
     public String getCompany() {
         return company;
@@ -59,6 +75,14 @@ public class ProductInfo implements Serializable {
         this.description = description;
     }
 
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
     public String getSenderPublicKey() {
         return senderPublicKey;
     }
@@ -76,13 +100,34 @@ public class ProductInfo implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductInfo that = (ProductInfo) o;
+        return Objects.equals(company, that.company) &&
+                Objects.equals(product, that.product) &&
+                Objects.equals(productionDate, that.productionDate) &&
+                Objects.equals(orginPlace, that.orginPlace) &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(notes, that.notes) &&
+                Objects.equals(senderPublicKey, that.senderPublicKey) &&
+                Objects.equals(signaturedData, that.signaturedData);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(company, product, productionDate, orginPlace, description, notes, senderPublicKey, signaturedData);
+    }
+
+    @Override
     public String toString() {
         return "ProductInfo{" +
                 "company='" + company + '\'' +
                 ", product='" + product + '\'' +
-                ", productionDate=" + productionDate +
+                ", productionDate='" + productionDate + '\'' +
                 ", orginPlace='" + orginPlace + '\'' +
                 ", description='" + description + '\'' +
+                ", notes='" + notes + '\'' +
                 ", senderPublicKey='" + senderPublicKey + '\'' +
                 ", signaturedData='" + signaturedData + '\'' +
                 '}';

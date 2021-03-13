@@ -1,6 +1,7 @@
 package cn.ftf.productblockchain.supervisionnode.bean;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Product
@@ -15,13 +16,18 @@ public class Product implements Serializable {
     private String productionDate;
     private String orginPlace;
     private String description;
+    private String notes;
 
-    public Product(String company, String product, String productionDate, String orginPlace, String description) {
+    public Product(String company, String product, String productionDate, String orginPlace, String description, String notes) {
         this.company = company;
         this.product = product;
         this.productionDate = productionDate;
         this.orginPlace = orginPlace;
         this.description = description;
+        this.notes = notes;
+    }
+    public Product(){
+
     }
 
     public String getCompany() {
@@ -64,14 +70,41 @@ public class Product implements Serializable {
         this.description = description;
     }
 
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product1 = (Product) o;
+        return Objects.equals(company, product1.company) &&
+                Objects.equals(product, product1.product) &&
+                Objects.equals(productionDate, product1.productionDate) &&
+                Objects.equals(orginPlace, product1.orginPlace) &&
+                Objects.equals(description, product1.description) &&
+                Objects.equals(notes, product1.notes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(company, product, productionDate, orginPlace, description, notes);
+    }
+
     @Override
     public String toString() {
         return "Product{" +
                 "company='" + company + '\'' +
                 ", product='" + product + '\'' +
-                ", productionDate=" + productionDate +
+                ", productionDate='" + productionDate + '\'' +
                 ", orginPlace='" + orginPlace + '\'' +
                 ", description='" + description + '\'' +
+                ", notes='" + notes + '\'' +
                 '}';
     }
 }

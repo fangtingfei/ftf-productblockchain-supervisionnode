@@ -18,8 +18,10 @@ public class ProductInfo implements Serializable {
     private String description;
     private String notes;
 
-    private String senderPublicKey;   //扫描终端公钥
-    private String signaturedData;  //数据签名
+    //扫描终端公钥
+    private String senderPublicKey;
+    //数据签名
+    private String signaturedData;
 
     public ProductInfo(){
 

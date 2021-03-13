@@ -17,7 +17,6 @@ import java.util.List;
 @Component
 public class DataPool {
     private List<ProductInfo> productInfoPool;
-    private ObjectMapper mapper=new ObjectMapper();
 
     public DataPool(){
         productInfoPool=new ArrayList<>();

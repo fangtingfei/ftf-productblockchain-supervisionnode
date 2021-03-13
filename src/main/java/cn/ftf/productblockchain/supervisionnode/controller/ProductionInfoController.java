@@ -9,11 +9,14 @@ import cn.ftf.productblockchain.supervisionnode.util.RSAUtils;
 import cn.ftf.productblockchain.supervisionnode.websocket.MyServer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
 
 /**
  * ProductionInfoController
@@ -28,37 +31,37 @@ public class ProductionInfoController {
     @Autowired
     private DataPool dataPool;
 
+    Logger logger= LoggerFactory.getLogger(getClass());
+
     @RequestMapping(value = "/addProduction", method = RequestMethod.POST)
     public Result addProduction(@RequestBody ProductInfo productInfo) throws Exception {
-        String orginJson=null;
         String productInfojson=null;
-        System.out.println("productInfo:\n"+productInfo);
+        String productJson=null;
+        logger.info("[录入商品信息] productInfo:"+productInfo);
         ObjectMapper mapper=new ObjectMapper();
         try {
-            orginJson = mapper.writeValueAsString(productInfo);
-            System.out.println("orginJson:\n"+orginJson);
+            productInfojson = mapper.writeValueAsString(productInfo);
+            logger.info("[录入商品信息转化为JSON] productInfojson:"+productInfojson);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
         try {
             Product product=new Product(productInfo.getCompany(),productInfo.getProduct(),productInfo.getProductionDate(),productInfo.getOrginPlace(),productInfo.getDescription(),productInfo.getNotes());
-            productInfojson=mapper.writeValueAsString(product);
-            System.out.println("productInfojson:\n"+productInfojson);
+            productJson=mapper.writeValueAsString(product);
+            logger.info("[提取商品信息]productJson:"+productJson);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
         boolean boo= RSAUtils.verify("SHA256withRSA", RSAUtils.getPublicKeyFromString("RSA",productInfo.getSenderPublicKey()), productInfojson, productInfo.getSignaturedData());
         if(boo){
             dataPool.addData(productInfo);
-            String messageJson = mapper.writeValueAsString(new Message(1, orginJson));
-//            System.out.println("messageJson:\n"+messageJson);
-//            String strMessage = mapper.readValue(messageJson, Message.class).toString();
-//            strMessage.replaceAll("\\\\n","\r\n");
-//            System.out.println("strMessage:\n"+strMessage);
+            String messageJson = mapper.writeValueAsString(new Message(1, productInfojson));
             MyServer server = WebSocketController.server;
             server.broadcast(messageJson);
+            logger.info("[数据校验成功，录入成功] productInfo:"+productInfo);
             return new Result(true,"录入成功！");
         }
+        logger.info("[数据校验失败，录入失败] productInfo:"+productInfo);
         return new Result(false,"录入失败");
     }
 

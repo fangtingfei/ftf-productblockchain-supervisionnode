@@ -1,3 +1,5 @@
 spring:
   application:
     name: supervision
+hello:
+  msg: hello00000000

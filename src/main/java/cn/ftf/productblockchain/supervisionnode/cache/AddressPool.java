@@ -16,6 +16,7 @@ public class AddressPool {
 
     public AddressPool(){
         addressPoll.add("ws://127.0.0.1:7000");
-        addressPoll.add("ws://127.0.0.1:9000");
+        addressPoll.add("ws://127.0.0.1:7001");
+        addressPoll.add("ws://127.0.0.1:7002");
     }
 }

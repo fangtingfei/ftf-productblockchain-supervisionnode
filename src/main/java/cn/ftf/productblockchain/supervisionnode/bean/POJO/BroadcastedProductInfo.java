@@ -1,4 +1,4 @@
-package cn.ftf.productblockchain.supervisionnode.bean;
+package cn.ftf.productblockchain.supervisionnode.bean.POJO;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -10,7 +10,7 @@ import java.util.Objects;
  * @Create 2020-12-10 17:16
  */
 
-public class ProductInfo implements Serializable {
+public class BroadcastedProductInfo implements Serializable {
     private String company;
     private String product;
     private String productionDate;
@@ -23,10 +23,10 @@ public class ProductInfo implements Serializable {
     //数据签名
     private String signaturedData;
 
-    public ProductInfo(){
+    public BroadcastedProductInfo(){
 
     }
-    public ProductInfo(String company, String product, String productionDate, String orginPlace, String description, String notes, String senderPublicKey, String signaturedData) {
+    public BroadcastedProductInfo(String company, String product, String productionDate, String orginPlace, String description, String notes, String senderPublicKey, String signaturedData) {
         this.company = company;
         this.product = product;
         this.productionDate = productionDate;
@@ -105,7 +105,7 @@ public class ProductInfo implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ProductInfo that = (ProductInfo) o;
+        BroadcastedProductInfo that = (BroadcastedProductInfo) o;
         return Objects.equals(company, that.company) &&
                 Objects.equals(product, that.product) &&
                 Objects.equals(productionDate, that.productionDate) &&
@@ -123,7 +123,7 @@ public class ProductInfo implements Serializable {
 
     @Override
     public String toString() {
-        return "ProductInfo{" +
+        return "BroadcastedProductInfo{" +
                 "company='" + company + '\'' +
                 ", product='" + product + '\'' +
                 ", productionDate='" + productionDate + '\'' +

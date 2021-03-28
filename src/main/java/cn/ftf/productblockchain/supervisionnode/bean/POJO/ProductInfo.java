@@ -1,16 +1,16 @@
-package cn.ftf.productblockchain.supervisionnode.bean;
+package cn.ftf.productblockchain.supervisionnode.bean.POJO;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * Product
+ * ProductInfo
  *
  * @Author 房廷飞
  * @Create 2020-12-11 19:42
  */
 
-public class Product implements Serializable {
+public class ProductInfo implements Serializable {
     private String company;
     private String product;
     private String productionDate;
@@ -18,7 +18,7 @@ public class Product implements Serializable {
     private String description;
     private String notes;
 
-    public Product(String company, String product, String productionDate, String orginPlace, String description, String notes) {
+    public ProductInfo(String company, String product, String productionDate, String orginPlace, String description, String notes) {
         this.company = company;
         this.product = product;
         this.productionDate = productionDate;
@@ -26,7 +26,7 @@ public class Product implements Serializable {
         this.description = description;
         this.notes = notes;
     }
-    public Product(){
+    public ProductInfo(){
 
     }
 
@@ -82,13 +82,13 @@ public class Product implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Product product1 = (Product) o;
-        return Objects.equals(company, product1.company) &&
-                Objects.equals(product, product1.product) &&
-                Objects.equals(productionDate, product1.productionDate) &&
-                Objects.equals(orginPlace, product1.orginPlace) &&
-                Objects.equals(description, product1.description) &&
-                Objects.equals(notes, product1.notes);
+        ProductInfo productInfo1 = (ProductInfo) o;
+        return Objects.equals(company, productInfo1.company) &&
+                Objects.equals(product, productInfo1.product) &&
+                Objects.equals(productionDate, productInfo1.productionDate) &&
+                Objects.equals(orginPlace, productInfo1.orginPlace) &&
+                Objects.equals(description, productInfo1.description) &&
+                Objects.equals(notes, productInfo1.notes);
     }
 
     @Override
@@ -98,7 +98,7 @@ public class Product implements Serializable {
 
     @Override
     public String toString() {
-        return "Product{" +
+        return "ProductInfo{" +
                 "company='" + company + '\'' +
                 ", product='" + product + '\'' +
                 ", productionDate='" + productionDate + '\'' +

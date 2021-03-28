@@ -1,29 +1,24 @@
-package cn.ftf.productblockchain.supervisionnode.bean;
+package cn.ftf.productblockchain.supervisionnode.message;
 
 /**
- * MessageBean
- *
- * @Author 房廷飞
- * @Create 2020-11-27 8:02
+ * @author fangitnfei
+ * @version 1.0
+ * @date 2021-03-27 19:08
  */
+public class BroadcastMsg {
+    Integer type;
+    String msg;
 
-public class Message {
-    public int type;
-    public String msg;
-
-    public Message() {
-    }
-
-    public Message(int type, String msg) {
+    public BroadcastMsg(Integer type, String msg) {
         this.type = type;
         this.msg = msg;
     }
 
-    public int getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 
@@ -37,7 +32,7 @@ public class Message {
 
     @Override
     public String toString() {
-        return "Message{" +
+        return "BroadcastMsg{" +
                 "type=" + type +
                 ", msg='" + msg + '\'' +
                 '}';

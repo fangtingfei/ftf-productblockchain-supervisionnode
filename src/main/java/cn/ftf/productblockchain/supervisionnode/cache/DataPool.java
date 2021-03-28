@@ -1,8 +1,7 @@
 package cn.ftf.productblockchain.supervisionnode.cache;
 
 
-import cn.ftf.productblockchain.supervisionnode.bean.ProductInfo;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import cn.ftf.productblockchain.supervisionnode.bean.POJO.ProductInfo;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

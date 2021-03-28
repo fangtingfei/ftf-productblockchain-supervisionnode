@@ -1,9 +1,6 @@
 package cn.ftf.productblockchain.supervisionnode.util;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -12,49 +9,32 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @date 2021-03-28 12:29
  */
 
-public final class JacksonUtils {
-
-    private JacksonUtils() {}
-
-    public final static ObjectMapper MAPPER;
-
-    static {
-        MAPPER = new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
-    }
-
-    public static String serialize(Object obj) {
+public class JacksonUtils {
+    /*
+     * 001.json转换成对象
+     * @param:传入对象，json字符串
+     * @return:Object
+     */
+    public static <T> T jsonToObj(String jsonStr, Class<T> clazz){
+        ObjectMapper mapper = new ObjectMapper();
         try {
-            return MAPPER.writeValueAsString(obj);
+            return mapper.readValue(jsonStr, clazz);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return null;
+    }
+    /*
+     * 002.对象转换成json
+     * @param:传入对象
+     * @return:json字符串
+     */
+    public static String objToJson(Object obj) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(obj);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public static Object deserialize(String jsonText, TypeReference type) {
-        try {
-            return MAPPER.readValue(jsonText, type);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public static <T> T deserialize(String jsonText, Class<T> beanClass) {
-        try {
-            return MAPPER.readValue(jsonText, beanClass);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public static JsonNode deserialize(String jsonText) {
-        try {
-            return MAPPER.readTree(jsonText);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }

@@ -9,6 +9,10 @@ public class BroadcastMsg {
     Integer type;
     String msg;
 
+    public BroadcastMsg(){
+
+    }
+
     public BroadcastMsg(Integer type, String msg) {
         this.type = type;
         this.msg = msg;

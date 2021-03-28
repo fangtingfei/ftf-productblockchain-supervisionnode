@@ -28,7 +28,6 @@ public class ProductionInfoController {
 
     @Autowired
     private DataPool dataPool;
-
     Logger logger= LoggerFactory.getLogger(getClass());
 
 //    @RequestMapping(value = "/addProduction", method = RequestMethod.POST)

@@ -1,7 +1,12 @@
 package cn.ftf.productblockchain.supervisionnode.websocket;
 
 
+import cn.ftf.productblockchain.supervisionnode.bean.POJO.BroadcastedProductInfo;
+import cn.ftf.productblockchain.supervisionnode.broadcastMsgConsumer.BroadcastMsgConsumer;
 import cn.ftf.productblockchain.supervisionnode.cache.AddressPool;
+import cn.ftf.productblockchain.supervisionnode.message.BroadcastMsg;
+import cn.ftf.productblockchain.supervisionnode.message.Result;
+import cn.ftf.productblockchain.supervisionnode.util.JacksonUtils;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.slf4j.Logger;
@@ -33,7 +38,18 @@ public class MyClient extends WebSocketClient {
 
     @Override
     public void onMessage(String message) {
-        logger.info("[客户端接收消息] Msg={}",message);;
+        logger.info("[客户端接收消息] Msg={}", message);
+        BroadcastMsg broadcastMsg = JacksonUtils.jsonToObj(message, BroadcastMsg.class);
+        switch (broadcastMsg.getType()) {
+            case 0: {
+                logger.info("[客户端接收商品信息] Msg={}", message);
+                BroadcastMsgConsumer.handleProductMsg(broadcastMsg.getMsg());
+                break;
+            }
+            default:{
+                logger.info("[广播消息体检测异常] Msg={}",message);
+            }
+        }
     }
 
     @Override

@@ -1,6 +1,7 @@
 package cn.ftf.productblockchain.supervisionnode.cache;
 
 
+import cn.ftf.productblockchain.supervisionnode.bean.POJO.BroadcastedProductInfo;
 import cn.ftf.productblockchain.supervisionnode.bean.POJO.ProductInfo;
 import cn.ftf.productblockchain.supervisionnode.broadcastMsgConsumer.BroadcastMsgConsumer;
 import org.slf4j.Logger;
@@ -18,15 +19,16 @@ import java.util.List;
  */
 @Component
 public class DataPool {
-    private static List<ProductInfo> productInfoPool;
+    private static List<BroadcastedProductInfo> productInfoPool;
     private static Logger logger= LoggerFactory.getLogger(DataPool.class);
     public DataPool(){
         productInfoPool=new ArrayList<>();
     }
 
-    public static void addData(ProductInfo productInfo){
-        productInfoPool.add(productInfo);
-        logger.info("[DataPool数据量]={}",productInfoPool.size());
+    public static void addData(BroadcastedProductInfo broadcastedProductInfo){
+        productInfoPool.add(broadcastedProductInfo);
+        int size=productInfoPool.size();
+        logger.info("[DataPool数据量]={}",size);
     }
 
 }

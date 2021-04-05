@@ -1,11 +1,9 @@
 package cn.ftf.productblockchain.supervisionnode.websocket;
 
 
-import cn.ftf.productblockchain.supervisionnode.bean.POJO.BroadcastedProductInfo;
 import cn.ftf.productblockchain.supervisionnode.broadcastMsgConsumer.BroadcastMsgConsumer;
 import cn.ftf.productblockchain.supervisionnode.cache.AddressPool;
 import cn.ftf.productblockchain.supervisionnode.message.BroadcastMsg;
-import cn.ftf.productblockchain.supervisionnode.message.Result;
 import cn.ftf.productblockchain.supervisionnode.util.JacksonUtils;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -44,6 +42,11 @@ public class MyClient extends WebSocketClient {
             case 0: {
                 logger.info("[客户端接收商品信息] Msg={}", message);
                 BroadcastMsgConsumer.handleProductMsg(broadcastMsg.getMsg());
+                break;
+            }
+            case 1:{
+                logger.info("[客户端接收打包区块信息] Msg={}", message);
+                BroadcastMsgConsumer.handleBlockMsg(broadcastMsg.getMsg());
                 break;
             }
             default:{

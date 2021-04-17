@@ -1,7 +1,10 @@
 package cn.ftf.productblockchain.supervisionnode.bean.POJO;
 
-import java.io.Serializable;
+import cn.ftf.productblockchain.supervisionnode.util.SerializeUtils;
+import org.apache.commons.codec.digest.DigestUtils;
 
+import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * 商品录入信息
@@ -17,16 +20,16 @@ public class BroadcastedProductInfo implements Serializable {
     private String orginPlace;
     private String description;
     private String notes;
+    private byte[] hash;
 
     //扫描终端公钥
     private String senderPublicKey;
     //数据签名
     private String signaturedData;
 
-    public BroadcastedProductInfo(){
+    public BroadcastedProductInfo() {
 
     }
-
     public BroadcastedProductInfo(String company, String product, Long timeStamp, String orginPlace, String description, String notes, String senderPublicKey, String signaturedData) {
         this.company = company;
         this.product = product;
@@ -38,12 +41,29 @@ public class BroadcastedProductInfo implements Serializable {
         this.signaturedData = signaturedData;
     }
 
-    public String getCompany() {
-        return company;
+    public byte[] hash() {
+        return DigestUtils.sha256(String.valueOf(this.timeStamp)+this.signaturedData);
+    }
+
+
+    public BroadcastedProductInfo(String company, String product, Long timeStamp, String orginPlace, String description, String notes, byte[] hash, String senderPublicKey, String signaturedData) {
+        this.company = company;
+        this.product = product;
+        this.timeStamp = timeStamp;
+        this.orginPlace = orginPlace;
+        this.description = description;
+        this.notes = notes;
+        this.hash = hash;
+        this.senderPublicKey = senderPublicKey;
+        this.signaturedData = signaturedData;
     }
 
     public void setCompany(String company) {
         this.company = company;
+    }
+
+    public String getCompany() {
+        return company;
     }
 
     public String getProduct() {
@@ -102,6 +122,15 @@ public class BroadcastedProductInfo implements Serializable {
         this.signaturedData = signaturedData;
     }
 
+
+    public byte[] getHash() {
+        return hash;
+    }
+
+    public void setHash(byte[] hash) {
+        this.hash = hash;
+    }
+
     @Override
     public String toString() {
         return "BroadcastedProductInfo{" +
@@ -111,9 +140,9 @@ public class BroadcastedProductInfo implements Serializable {
                 ", orginPlace='" + orginPlace + '\'' +
                 ", description='" + description + '\'' +
                 ", notes='" + notes + '\'' +
+                ", hash=" + Arrays.toString(hash) +
                 ", senderPublicKey='" + senderPublicKey + '\'' +
                 ", signaturedData='" + signaturedData + '\'' +
                 '}';
     }
 }
-

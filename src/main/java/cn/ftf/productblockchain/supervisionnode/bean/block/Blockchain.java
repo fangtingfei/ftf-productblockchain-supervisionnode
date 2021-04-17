@@ -1,14 +1,18 @@
-package cn.ftf.productblockchain.supervisionnode.bean;
+package cn.ftf.productblockchain.supervisionnode.bean.block;
 
+import cn.ftf.productblockchain.supervisionnode.util.ByteUtils;
 import cn.ftf.productblockchain.supervisionnode.util.JacksonUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
-import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
+
 import javax.annotation.PostConstruct;
 import java.io.File;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -16,6 +20,7 @@ import java.util.List;
  * @version 1.0
  * @date 2021-04-05 11:55
  */
+@Component
 public class Blockchain {
     private static List<MiniBlock> blocks=new ArrayList<>();
 
@@ -51,7 +56,18 @@ public class Blockchain {
         blocks.add(block);
     }
 
-
+    /**
+     * 添加区块
+     *
+     * @param block
+     */
+    public static void addBlock(MiniBlock block) throws IOException {
+        blocks.add(block);
+        String blockJson = JacksonUtils.objToJson(block);
+        File blockChainDB = new File("blockchain.db");
+        FileUtils.write(blockChainDB,blockJson,"UTF-8",true);
+        FileUtils.write(blockChainDB,"\n","UTF-8",true);
+    }
 
     /**
      * 区块合法性验证
@@ -77,7 +93,6 @@ public class Blockchain {
         if (StringUtils.isNoneBlank(block.getPreHash())) {
             prevBlockHashBytes = new BigInteger(block.getPreHash(), 16).toByteArray();
         }
-
         byte[] data =ByteUtils.merge(
                 prevBlockHashBytes,
                 //所有商品信息的默克尔Hash
@@ -92,32 +107,6 @@ public class Blockchain {
         return true;
     }
 
-
-
-    public static MiniBlock getBlockByHeight(int height){
-        return blocks.get(height);
-    }
-
-    /**
-     * 全链校验
-     * @return
-     */
-    public static boolean verifyAllBlockChain() throws Exception {
-        for (int i = 0; i < blocks.size(); i++) {
-            if(!verifyBlock(blocks.get(i))){
-                System.out.println("全链校验失败，失败目标block"+blocks.get(i));
-                return false;
-            }
-        }
-        return true;
-    }
-
-
-
-
-
-
-
     public List<MiniBlock> getBlocks() {
         return blocks;
     }
@@ -126,3 +115,4 @@ public class Blockchain {
         blocks = blocks;
     }
 }
+

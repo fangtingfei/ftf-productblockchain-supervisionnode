@@ -1,6 +1,4 @@
-package cn.ftf.productblockchain.supervisionnode.bean;
-
-import cn.ftf.productblockchain.supervisionnode.bean.POJO.BroadcastedProductInfo;
+package cn.ftf.productblockchain.supervisionnode.bean.block;
 
 /**
  * @author fangtingfei

@@ -1,9 +1,9 @@
 package cn.ftf.productblockchain.supervisionnode.controller;
 
+import cn.ftf.productblockchain.supervisionnode.cache.AddressPool;
 import cn.ftf.productblockchain.supervisionnode.message.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import cn.ftf.productblockchain.supervisionnode.cache.AddressPool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

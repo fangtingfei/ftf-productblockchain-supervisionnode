@@ -1,9 +1,9 @@
-package cn.ftf.productblockchain.supervisionnode.bean;
+package cn.ftf.productblockchain.supervisionnode.bean.block;
 
 import cn.ftf.productblockchain.supervisionnode.bean.POJO.BroadcastedProductInfo;
+import cn.ftf.productblockchain.supervisionnode.util.ByteUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -27,7 +27,7 @@ public class Block {
      * @return
      */
     public static Block newGenesisBlock(BroadcastedProductInfo coinbase) {
-        return Block.newBlock(-1, ByteUtils.ZERO_HASH, new BroadcastedProductInfo[]{coinbase});
+        return Block.newBlock(-1,ByteUtils.ZERO_HASH, new BroadcastedProductInfo[]{coinbase});
     }
 
     /**

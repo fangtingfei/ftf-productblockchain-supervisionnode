@@ -1,6 +1,7 @@
 package cn.ftf.productblockchain.supervisionnode.websocket;
 
 
+
 import cn.ftf.productblockchain.supervisionnode.broadcastMsgConsumer.BroadcastMsgConsumer;
 import cn.ftf.productblockchain.supervisionnode.cache.AddressPool;
 import cn.ftf.productblockchain.supervisionnode.message.BroadcastMsg;
@@ -10,6 +11,7 @@ import org.java_websocket.handshake.ServerHandshake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.net.URI;
 
 /**
@@ -41,7 +43,11 @@ public class MyClient extends WebSocketClient {
         switch (broadcastMsg.getType()) {
             case 0: {
                 logger.info("[客户端接收商品信息] Msg={}", message);
-                BroadcastMsgConsumer.handleProductMsg(broadcastMsg.getMsg());
+                try {
+                    BroadcastMsgConsumer.handleProductMsg(broadcastMsg.getMsg());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
             }
             case 1:{

@@ -1,15 +1,20 @@
 package cn.ftf.productblockchain.supervisionnode.broadcastMsgConsumer;
 
-import cn.ftf.productblockchain.supervisionnode.bean.Block;
-import cn.ftf.productblockchain.supervisionnode.bean.Blockchain;
-import cn.ftf.productblockchain.supervisionnode.bean.MiniBlock;
+
 import cn.ftf.productblockchain.supervisionnode.bean.POJO.BroadcastedProductInfo;
 import cn.ftf.productblockchain.supervisionnode.bean.POJO.ProductInfo;
+import cn.ftf.productblockchain.supervisionnode.bean.block.Block;
+import cn.ftf.productblockchain.supervisionnode.bean.block.Blockchain;
+import cn.ftf.productblockchain.supervisionnode.bean.block.MiniBlock;
 import cn.ftf.productblockchain.supervisionnode.cache.DataPool;
 import cn.ftf.productblockchain.supervisionnode.util.JacksonUtils;
 import cn.ftf.productblockchain.supervisionnode.util.RSAUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.IOException;
+import java.util.HashSet;
 
 /**
  * @author fangtingfei
@@ -20,37 +25,59 @@ public class BroadcastMsgConsumer {
 
     private static Logger logger = LoggerFactory.getLogger(BroadcastMsgConsumer.class);
 
-    public static void handleProductMsg(String broadcastMsgJson) {
+    public static void handleProductMsg(String broadcastMsgJson) throws IOException {
         BroadcastedProductInfo broadcastedProductInfo = JacksonUtils.jsonToObj(broadcastMsgJson, BroadcastedProductInfo.class);
         String productJson = null;
         ProductInfo product = null;
         try {
             product = new ProductInfo(broadcastedProductInfo.getCompany(), broadcastedProductInfo.getProduct(), broadcastedProductInfo.getTimeStamp(), broadcastedProductInfo.getOrginPlace(), broadcastedProductInfo.getDescription(), broadcastedProductInfo.getNotes());
             productJson = JacksonUtils.objToJson(product);
-            logger.info("[提取商品信息]productJson={}",productJson);
+            logger.info("[提取商品信息]productJson:" + productJson);
         } catch (Exception e) {
             e.printStackTrace();
         }
         boolean boo = RSAUtils.verify("SHA256withRSA", RSAUtils.getPublicKeyFromString("RSA", broadcastedProductInfo.getSenderPublicKey()), productJson, broadcastedProductInfo.getSignaturedData());
         if (boo) {
             DataPool.addData(broadcastedProductInfo);
-            logger.info("[数据校验成功，录入成功] productInfo={}",product);
+            logger.info("[数据校验成功，录入成功] productInfo:" + product);
             return;
         }
-        logger.info("[数据校验失败，录入失败！] productInfo={}",product);
+        logger.info("[数据校验失败，录入失败！] productInfo:" + product);
 
     }
-    public static void handleBlockMsg(String broadcastMsgJson){
+
+    public static void handleBlockMsg(String broadcastMsgJson) {
         Block block = JacksonUtils.jsonToObj(broadcastMsgJson, Block.class);
         MiniBlock miniBlock = null;
         //区块校验
-        Blockchain.verifyBlock(block);
+        boolean boo = Blockchain.verifyBlock(block);
+        if (!boo) {
+            logger.info("[接收的区块验证失败] block={}", block);
+        }
+        System.out.println("[接收的区块验证成功]");
+        //TODO
+        //验证成功，待补充
+        HashSet<String> localHashSet = new HashSet<>();
+        for (int i = 0; i < DataPool.getProductInfoPool().size(); i++) {
+            localHashSet.add(JacksonUtils.objToJson(DataPool.getProductInfoPool().get(i)));
+        }
+        for (int i = 0; i < block.getList().length; i++) {
+            if (!localHashSet.contains(JacksonUtils.objToJson(block.getList()[i]))) {
+                System.out.println("本地数据池不含有该条数据！");
+            } else {
+                System.out.println("匹配到本地数据池数据" + JacksonUtils.objToJson(block.getList()[i]));
+            }
+        }
+
         try {
-            miniBlock=new MiniBlock(block.height,block.timeStamp,block.hash,block.preHash);
+            miniBlock = new MiniBlock(block.height, block.timeStamp, block.hash, block.preHash);
             logger.info("[生成MiniBlock] miniBlock={}", miniBlock);
-        }catch (Exception e){
+            Blockchain.addBlock(miniBlock);
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
+
+
 }

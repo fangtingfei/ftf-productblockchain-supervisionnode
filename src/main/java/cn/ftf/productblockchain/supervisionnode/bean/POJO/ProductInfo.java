@@ -1,7 +1,6 @@
 package cn.ftf.productblockchain.supervisionnode.bean.POJO;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * ProductInfo

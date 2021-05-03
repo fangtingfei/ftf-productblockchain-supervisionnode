@@ -6,6 +6,7 @@ import cn.ftf.productblockchain.supervisionnode.broadcastMsgConsumer.BroadcastMs
 import cn.ftf.productblockchain.supervisionnode.cache.AddressPool;
 import cn.ftf.productblockchain.supervisionnode.message.BroadcastMsg;
 import cn.ftf.productblockchain.supervisionnode.util.JacksonUtils;
+import lombok.SneakyThrows;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.slf4j.Logger;
@@ -51,8 +52,17 @@ public class MyClient extends WebSocketClient {
                 break;
             }
             case 1:{
-                logger.info("[客户端接收打包区块信息] Msg={}", message);
-                BroadcastMsgConsumer.handleBlockMsg(broadcastMsg.getMsg());
+                logger.info("[客户端接收待共识区块信息] Msg={}", message);
+                BroadcastMsgConsumer.handleBlockMsg(broadcastMsg.getMsg(),this);
+                break;
+            }
+            case 2:{
+                logger.info("[客户端接收共识区块信息] Msg={}", message);
+                try {
+                    BroadcastMsgConsumer.handleViewedBlockMsg(broadcastMsg.getMsg());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
             }
             default:{

@@ -5,6 +5,8 @@ import cn.ftf.productblockchain.supervisionnode.util.JacksonUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -23,6 +25,7 @@ import java.util.List;
 @Component
 public class Blockchain {
     private static List<MiniBlock> blocks=new ArrayList<>();
+    Logger logger= LoggerFactory.getLogger(getClass());
 
     @PostConstruct
     private void init() throws Exception {
@@ -32,10 +35,10 @@ public class Blockchain {
         }
         List<String> blocks = FileUtils.readLines(blockChainDB, "UTF-8");
         if(blocks.size()==0){
-            System.out.println("监督节点区块链初始化失败-没有区块,请检出区块DB");
+            logger.info("监督节点区块链初始化失败-没有区块,请检查出区块DB");
         }
         blocks.stream().forEach(blockJson->initBlockChainFromDB(blockJson));
-        System.out.println("监督节点区块链初始化成功，size="+blocks.size());
+        logger.info("监督节点区块链初始化成功 size="+blocks.size());
     }
 
     /**

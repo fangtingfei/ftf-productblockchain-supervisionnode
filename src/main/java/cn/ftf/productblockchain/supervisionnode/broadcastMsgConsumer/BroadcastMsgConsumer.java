@@ -56,7 +56,7 @@ public class BroadcastMsgConsumer {
         if (!boo) {
             logger.info("[接收的区块验证失败] block={}", block);
         }
-        System.out.println("[接收的区块验证成功]");
+        logger.info("[接收的区块验证成功] block={}", block);
         //TODO
         //验证成功，待补充
         Boolean matchFlag=true;
@@ -66,14 +66,17 @@ public class BroadcastMsgConsumer {
         }
         for (int i = 0; i < block.getList().length; i++) {
             if (!localHashSet.contains(JacksonUtils.objToJson(block.getList()[i]))) {
-                System.out.println("本地数据池不含有该条数据！");
+                logger.info("[本地数据池不含有该条数据！]BroadcastedProductInfo={}",JacksonUtils.objToJson(block.getList()[i]));
                 matchFlag=false;
             } else {
-                System.out.println("匹配到本地数据池数据" + JacksonUtils.objToJson(block.getList()[i]));
+                logger.info("[匹配到本地数据池数据！]BroadcastedProductInfo={}",JacksonUtils.objToJson(block.getList()[i]));
+
             }
         }
         if(matchFlag){
             BroadcastMsg msg=new BroadcastMsg(3,"VOTE");
+            logger.info("[所有数据匹配成功，对该区块产生共识！]");
+            logger.info("[对该节点投票] uri={},msg={}",client.getURI(),msg);
             client.send(JacksonUtils.objToJson(msg));
         }
 
@@ -91,6 +94,8 @@ public class BroadcastMsgConsumer {
         for (int i = 0; i < 4; i++) {
             DataPool.getProductInfoPool().remove(0);
         }
+        logger.info("[本地数据初始化完成]");
+
     }
 
 }
